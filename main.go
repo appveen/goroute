@@ -76,6 +76,7 @@ func StartRouter(config Config) error {
 					if strings.Split(req.RequestURI, "/")[1] != strings.Split(temp.Path, "/")[1] {
 						http.NotFound(w, req)
 					} else {
+						log.Println("Request URL : ", req.RequestURI)
 						headers := temp.Headers
 						for k, v := range headers.Request {
 							req.Header.Add(k, v)
