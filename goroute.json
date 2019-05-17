@@ -1,29 +1,34 @@
 {
     "host" : "0.0.0.0",
-    "port" : "8888",
+    "port" : "32001",
     "security" : {
-        "enabled" : false,
-        "certPath" : "",
-        "keyPath" : "",
+        "enabled" : true,
+        "certPath" : "/usr/share/nginx/keys/odp_server.crt",
+        "keyPath" : "/usr/share/nginx/keys/odp_server.key",
         "minTLSVersion" : "",
         "maxTLSVersion" : ""
     },
     "caching" : {
-        "enabled" : true,
+        "enabled" : false,
         "endpoint" : "0.0.0.0:11211"
     },
     "routes" : [
         {
+            "path" : "/socket.io",
+            "target" : "http://gw.$namespace$/socket.io",
+            "targetType" : "URL"
+        },
+        {
             "path" : "/api",
             "headers" : {
                 "request" : {
-                    "Server" : "ODP"
+                        "a" : "b"
                 },
                 "response" : {
-                    "Server" : "ODP"
+                        "a" : "b"
                 }
             },
-            "target" : "http://gw.$namespace$/test",
+            "target" : "http://gw.$namespace$/api",
             "targetType" : "URL"
         },
         {
@@ -31,7 +36,16 @@
             "headers" : {
                 "Server" : "ODP"
             },
-            "target" : "C:\\Users\\Lakshay\\Desktop\\WORK\\odp-b2b-agent\\",
+            "target" : "./author",
+            "targetType" : "STATIC",
+            "cacheExpiry" : 10
+        },
+        {
+            "path" : "/appcenter",
+            "headers" : {
+                "Server" : "ODP"
+            },
+            "target" : "./appcenter",
             "targetType" : "STATIC",
             "cacheExpiry" : 10
         }
