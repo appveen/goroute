@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/http/httputil"
 	"net/url"
 	"os"
 	"strings"
@@ -79,19 +78,17 @@ func StartRouter(config Config) error {
 						log.Println("Request URL : ", req.RequestURI)
 						headers := temp.Headers
 						for k, v := range headers.Request {
+							// req.Header.Del(k)
 							req.Header.Add(k, v)
 						}
 						url, _ := url.Parse(temp.Target)
-						proxy := httputil.NewSingleHostReverseProxy(url)
+						proxy := NewSingleHostReverseProxy(url)
 						req.URL.Host = url.Host
 						req.URL.Scheme = url.Scheme
 						req.URL.Path = req.URL.Path[len(route.Path):len(req.URL.Path)]
 						req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 						req.Host = url.Host
-						for k, v := range headers.Response {
-							w.Header().Add(k, v)
-						}
-						proxy.ServeHTTP(w, req)
+						proxy.ServeHTTP(w, req, headers.Response)
 					}
 				})
 			}(route)
